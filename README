@@ -1,0 +1,49 @@
+= Double Submit Protection Plugin =
+===================================
+
+This plugin implements a symetrical token approach to avoid duplicate posts of data. This is specially
+useful when you're dealing with data-sensitive forms (credit-card processing, for instance), where
+a duplicated posting may lead to a user getting charged twice. This control is done via a
+token placed on user's form and synchronized with the session - whenever the token is different, you
+can simply verify it on the controllers by using the 'double_submit?' method
+
+Version History
+===============
+
+v1.0 <-- You are here
+- Initial release of the plugin
+
+v1.1 (still to be released)
+- Automatic support for token as an attribute (e.g. form_for :something, :url => {}, :double_submit_protection => true }
+- Save the cheerleader, save the world
+
+Usage Example
+=============
+
+some_view.html.erb
+----------------------------------------------------------------------
+<%= form_for :blah, :url => { :action => "create" } do |f| %>
+  ... (some form content here)
+  <%=double_submit_token %>
+<% end %>
+----------------------------------------------------------------------
+
+blah_controller.rb
+  def create
+    if double_submit?
+      flash[:message] = 'Whoa, hang in there dude...'
+      render :action => :register
+      return
+    end
+
+    # do something here
+  end
+end
+
+----------------------------------------------------------------------
+
+============================
+
+Copyright (C) 2008 Herval Freire (hervalfreire@gmail.com). No license intended - you are free to duplicate,
+immitate, print this code and shred it to pieces, blog about it, take pictures with it and even say it was
+ brilliantly developed by yourself and brag about it.
